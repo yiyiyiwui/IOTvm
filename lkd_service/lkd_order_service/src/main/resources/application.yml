@@ -1,0 +1,80 @@
+server:
+  port: 9008
+spring:
+  application:
+    name: order-service
+  cloud:
+    nacos:
+      server-addr: 192.168.200.128
+  datasource:
+    url: jdbc:mysql://192.168.200.128:3306/lkd_order?useUnicode=true&autoReconnect=true&autoReconnectForPools=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root123
+  redis:
+    host: 192.168.200.128
+    port: 6379
+  elasticsearch:
+    rest:
+      uris: http://192.168.200.128:9200
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+xxl:
+  job:
+    accessToken:
+    admin:
+      addresses: http://192.168.200.128:8080/xxl-job-admin
+    executor:
+      appname: order-service
+      address:
+      ip:
+      port: 9982
+      logretentiondays: 30
+ribbon:
+  #单位ms,请求连接的超时时间，默认1000
+  ConnectTimeout: 500
+  #单位ms,读取数据的超时时间，默认1000
+  ReadTimeout: 3000
+  #对所有操作请求都进行重试
+  #设置为true时，会对所有的请求进行重试，若为false只会对get请求进行重试
+  #如果是put或post等写操作，
+  #如果服务器接口没做幂等性，会产生不好的结果，所以OkToRetryOnAllOperations慎用。
+  #默认情况下,GET方式请求无论是连接异常还是读取异常,都会进行重试
+  #非GET方式请求,只有连接异常时,才会进行重试
+  #OkToRetryOnAllOperations: false
+  #切换实例的重试次数，默认为1
+  #MaxAutoRetriesNextServer: 2
+  #如果不配置ribbon的重试次数
+  #对当前实例的重试次数,默认为0
+  #MaxAutoRetries: 3
+  eager-load:
+    enabled: true
+    clients: user-service,vm-service
+mqtt:
+  client:
+    username: admin
+    password: public
+    serverURI: tcp://192.168.200.128:1883
+    clientId: monitor.order${random.int[1000,9999]}
+    keepAliveInterval: 10
+    connectionTimeout: 30
+  producer:
+    defaultQos: 2
+    defaultRetained: false
+    defaultTopic: topic/test1
+  consumer:
+    consumerTopics: $queue/server/order/#,$share/order/server/vms/#
+
+
+wxpay:
+  #商户微信公共号或开放平台唯一标识
+  appId: wxb709cf6e6a7d9d2a
+  #商户微信公共号或开放平台密钥
+  appSecret: d9a9ff00a633cd7353a8925119063b01
+  #商户号
+  mchId: 1473426802
+  #商户密钥
+  partnerKey: T6m9iK73b0kn9g5v426MKfHQH7X8rKwb
+  #微信回调商户的地址
+  notifyUrl: https://625b70ef.r16.cpolar.top/order/payNotify
+

@@ -1,0 +1,65 @@
+server:
+  port: 9004
+spring:
+  application:
+    name: vm-service
+  cloud:
+    nacos:
+      server-addr: 192.168.200.128
+  datasource:
+    url: jdbc:mysql://192.168.200.128:3306/lkd_vms?useUnicode=true&autoReconnect=true&autoReconnectForPools=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: 192.168.200.128
+    port: 6379
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+ribbon:
+  eager-load:  #ribbon的饥饿加载，系统启动时就初始化
+    enabled: true
+    clients: user-service,task-service
+hystrix:  #熔断器超时配置
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+
+minio:
+  accessKey: minio
+  secretKey: minio123
+  bucket: lkd
+  endpoint: http://192.168.200.128:9001
+  readPath: http://192.168.200.128:9001
+
+
+mqtt:
+  client:
+    username: admin
+    password: public
+    serverURI: tcp://192.168.200.128:1883
+    clientId: monitor.vms.${random.int[1000,9999]}
+    keepAliveInterval: 10
+    connectionTimeout: 30
+  producer:
+    defaultQos: 2
+    defaultRetained: false
+    defaultTopic: testtopic/test1
+  consumer:
+    consumerTopics: $queue/server/vms/#
+
+xxl:
+  job:
+    accessToken:
+    admin:
+      addresses: http://192.168.200.128:8080/xxl-job-admin
+    executor:
+      appname: vm-service
+      address:
+      ip:
+      port: 9989
+      logretentiondays: 30 # 执行前日志保存天数，日志文件过期自动删除

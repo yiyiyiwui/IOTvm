@@ -1,0 +1,44 @@
+server:
+  port: 9005
+spring:
+  application:
+    name: task-service
+  cloud:
+    nacos:
+      server-addr: 192.168.200.128
+  datasource:
+    url: jdbc:mysql://192.168.200.128:3306/lkd_production?useUnicode=true&autoReconnect=true&autoReconnectForPools=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root123
+  redis:
+    host: 192.168.200.128
+    port: 6379
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+ribbon:
+  eager-load:  #ribbon的饥饿加载，系统启动时就初始化
+    enabled: true
+    clients: user-service,vm-service
+hystrix:  #熔断器超时配置
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+
+mqtt:
+  client:
+    username: admin
+    password: public
+    serverURI: tcp://192.168.200.128:1883
+    clientId: monitor.task.${random.int[1000,9999]}
+    keepAliveInterval: 10
+    connectionTimeout: 30
+  producer:
+    defaultQos: 2
+    defaultRetained: false  #不保留消息
+    defaultTopic: testtopic/test1
+  consumer:
+    consumerTopics: $queue/server/task/#,$share/task/server/vms/status

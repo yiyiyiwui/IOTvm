@@ -1,0 +1,34 @@
+server:
+  port: 9009
+spring:
+  application:
+    name: microapp
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      server-addr: 192.168.200.128
+ribbon:
+  #OkToRetryOnAllOperations: true
+  #MaxAutoRetriesNextServer: 1
+  #MaxAutoRetries: 2
+  eager-load:
+    enabled: true
+    clients: order-service, vm-service
+mqtt:
+  client:
+    username: admin
+    password: public
+    serverURI: tcp://192.168.200.128:1883
+    clientId: monitor.user${random.int[1000,9999]}
+    keepAliveInterval: 10
+    connectionTimeout: 30
+  producer:
+    defaultQos: 2
+    defaultRetained: false
+    defaultTopic: topic/test1
+  consumer:
+    consumerTopics:
+wxpay:
+  appId: wxb709cf6e6a7d9d2a
+  appSecret: d9a9ff00a633cd7353a8925119063b01

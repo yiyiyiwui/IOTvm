@@ -1,0 +1,31 @@
+server:
+  port: 9010
+spring:
+  application:
+    name: microapp-gateway
+  cloud:
+    nacos:
+      server-addr: 192.168.200.128
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+          filters:
+      globalcors:
+        cors-configurations:
+          '[/**]': # 匹配所有请求
+            allowedOrigins: "*" #跨域处理 允许所有的域
+            allowedHeaders: "*"
+            allowedMethods: # 支持的方法
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+      routes:
+        #小程序服务
+        - id: microapp
+          uri: lb://microapp
+          predicates:
+            - Path=/**
+          filters:

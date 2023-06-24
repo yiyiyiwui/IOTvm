@@ -1,0 +1,67 @@
+server:
+  port: 9006
+spring:
+  application:
+    name: user-service
+  cloud:
+    nacos:
+      server-addr: 192.168.200.128
+    alicloud:
+      access-key: LTAI4Frk7UF5C4dupvaHfopQ
+      secret-key: 1FH7Bxe3lrYFmqrIXqWjM0x4VAHpXR
+  datasource:
+    url: jdbc:mysql://192.168.200.128:3306/lkd_user?useUnicode=true&autoReconnect=true&autoReconnectForPools=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root123
+  redis:
+    host: 192.168.200.128
+    port: 6379
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+ribbon:
+  eager-load:  #ribbon的饥饿加载，系统启动时就初始化
+    enabled: true
+    clients: user-service,task-service
+hystrix:  #熔断器超时配置
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+
+
+lkd:
+  sms:
+    key: LTAI5t8zSoPCWazMjygLuhCY
+    secret: qbCgYQdAVneNU277Onz3Ir74z0ocKd
+    sign-name: 阿里云短信测试
+    template-code: SMS_154950909
+
+mqtt:
+  client:
+    username: admin
+    password: public
+    serverURI: tcp://192.168.200.128:1883
+    clientId: monitor.user.${random.int[1000,9999]}
+    keepAliveInterval: 10
+    connectionTimeout: 30
+  producer:
+    defaultQos: 2
+    defaultRetained: false
+    defaultTopic: testtopic/test1
+  consumer:
+    consumerTopics: $queue/server/user/#
+
+xxl:
+  job:
+    accessToken:
+    admin:
+      addresses: http://192.168.200.128:8080/xxl-job-admin
+    executor:
+      appname: user-service
+      address:
+      ip:
+      port: 9980
+      logretentiondays: 30 # 执行前日志保存天数，日志文件过期自动删除
